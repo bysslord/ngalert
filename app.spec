@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['app.py'],
-             pathex=['/home/ionull/ngalert'],
+             pathex=['/Users/haizhi/dev/ngalert'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -18,12 +18,20 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
+          exclude_binaries=True,
           name='app',
           debug=False,
           strip=False,
           upx=True,
-          runtime_tmpdir=None,
-          console=True )
+          console=False )
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               name='app')
+app = BUNDLE(coll,
+             name='app.app',
+             icon=None,
+             bundle_identifier=None)
