@@ -1,10 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-
 class ClientConfig(object):
-    PUBLIC_KEY = 'M1OXwi/A60mpNssRBx08HfwbUpDQq2uhe6hi+cTbW9E'
+    PUBLIC_KEY = 'None'
     APP_NAME = 'ngalert'
     COMPANY_NAME = 'ionull.com'
-    UPDATE_URLS = [u'https://ngalert.ionull.com/release', u'http://127.0.0.1:23333']
+    UPDATE_URLS = ['https://ngalert.ionull.com/release', 'http://127.0.0.1:5400']
     MAX_DOWNLOAD_RETRIES = 3
