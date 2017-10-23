@@ -66,6 +66,8 @@ class Tray(QSystemTrayIcon):
         return self.setting.value('token', defaultValue=None)
 
     def _create_window(self):
+        if self.window:
+            del self.window
         if self.is_login:
             log.info('Token {} found, show main window'.format(type(self.is_login)))
             return MainWindow(self)
