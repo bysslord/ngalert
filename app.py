@@ -5,11 +5,13 @@ import sys
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QCloseEvent
 
-import util.constant
 from PyQt5.Qt import QApplication, QSystemTrayIcon, QIcon, QMenu
 from PyQt5.QtWidgets import QWidget, QPushButton, QLineEdit
 from PyQt5.uic import loadUi
+
+import util.constant
 from util.logger import log
+from core.api import NgAlertD
 
 
 class MainWindow(QWidget):
@@ -32,13 +34,16 @@ class LoginWindow(QWidget):
         super().__init__(*args, **kwargs)
         self.tray = parent
         loadUi(util.constant.UI_LOGIN, self)
+        self._init_slot()
+
+    def _init_slot(self):
+        self.pushButton_login.clicked.connect(self.login)
 
     def login(self):
         username, password = self.lineEdit_username.text(), self.lineEdit_password.text()
         if not (username and password):
             self.tray.showMessage('提示', '请输入用户名密码')
             return
-        print(username, password)
 
 
 class Menu(QMenu):
@@ -52,6 +57,7 @@ class Menu(QMenu):
 
 class Tray(QSystemTrayIcon):
     window: MainWindow
+    server: NgAlertD
 
     def __init__(self, *__args):
         super().__init__(*__args)
@@ -59,11 +65,12 @@ class Tray(QSystemTrayIcon):
         self.setIcon(QIcon(util.constant.ICON))
         self.setContextMenu(Menu(self))
         self.setting = QSettings()
+        self.server = NgAlertD(token=self.setting.value('token'))
         self.show_main_window()
 
     @property
     def is_login(self):
-        return self.setting.value('token', defaultValue=None)
+        return self.server.is_login()
 
     def _create_window(self):
         if self.window:
